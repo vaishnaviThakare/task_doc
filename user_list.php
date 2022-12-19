@@ -1,14 +1,22 @@
 <?php include'db_connect.php' ?>
 <div class="col-lg-12">
 	<div class="card card-outline card-success">
-		<div class="card-header">
-		</div>
+		
 		<div class="card-body">
-			<table class="table tabe-hover table-bordered" id="list">
+			<table class="table tabe-hover table-condensed" id="list">
+			<colgroup>
+					<col width="5%">
+					<col width="15%">
+					<col width="15%">
+					<col width="20%">
+					<col width="15%">
+					<col width="15%">
+					</colgroup>
 				<thead>
 					<tr>
 						<th class="text-center">#</th>
-						<th>Name</th>
+						<th>First Name</th>
+						<th>Last Name</th>
 						<th>Email</th>
 						<th>Role</th>
 						<th>Action</th>
@@ -23,7 +31,8 @@
 					?>
 					<tr>
 						<th class="text-center"><?php echo $i++ ?></th>
-						<td><b><?php echo ucwords($row['name']) ?></b></td>
+						<td><b><?php echo ucwords($row['firstname']) ?></b></td>
+						<td><b><?php echo ucwords($row['lastname']) ?></b></td>
 						<td><b><?php echo $row['email'] ?></b></td>
 						<td><b><?php echo $type[$row['type']] ?></b></td>
 						<td class="text-center">
@@ -36,7 +45,9 @@
 		                      <a class="dropdown-item" href="./index.php?page=edit_user&id=<?php echo $row['id'] ?>">Edit</a>
 		                      <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item delete_user" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">Delete</a>
-		                    </div>
+		                  
+
+							</div>
 						</td>
 					</tr>	
 				<?php endwhile; ?>
