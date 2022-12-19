@@ -36,7 +36,12 @@
 		</div>
         </form>
         </div>
-    	<div class="card-footer border-top border-info">
+		<!-- <div class="col-lg-12 text-right justify-content-center d-flex">
+			
+					<button class="btn btn-primary mr-2">Save</button>
+					<button class="btn btn-secondary" type="button" onclick="location.href = 'index.php?page=project_list'">Cancel</button>
+				</div> -->
+    	<div class="col-lg-12 text-right justify-content-center d-flex">
     		<div class="d-flex w-100 justify-content-center align-items-center">
     			<button class="btn btn-flat  bg-gradient-primary mx-2" form="manage-project">Save</button>
     			<button class="btn btn-flat bg-gradient-secondary mx-2" type="button" onclick="location.href='index.php?page=project_list'">Cancel</button>
