@@ -10,7 +10,7 @@
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="" class="control-label">Task Name</label>
-					<input type="text" class="form-control form-control-sm" name="name" value="<?php echo isset($name) ? $name : '' ?>">
+					<input type="text" class="form-control form-control-sm" name="task_name" value="<?php echo isset($task_name) ? $task_name : '' ?>">
 				</div>
 			</div>
           	<div class="col-md-6">
@@ -20,6 +20,7 @@
 						<option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>To-Do</option>
 						<option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>In-Progress</option>
 						<option value="5" <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Done</option>
+                        <option value="4" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>Review</option>
 					</select>
 				</div>
 			</div>
@@ -119,7 +120,7 @@
 				if(resp == 1){
 					alert_toast('Data successfully saved',"success");
 					setTimeout(function(){
-						location.href = 'index.php?page=project_list'
+						location.href = 'index.php?page=task_list'
 					},2000)
 				}
 			}
