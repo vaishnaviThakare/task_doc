@@ -3,24 +3,72 @@
 <div class="col-lg-12">
 	<div class="card card-outline card-primary">
 		<div class="card-body">
-			<form action="" id="manage-project">
+			<form action="" id="manage-task">
 
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
 		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="" class="control-label">Task Name</label>
-					<input type="text" class="form-control form-control-sm" name="task_name" value="<?php echo isset($task_name) ? $task_name : '' ?>">
+					<input type="text" class="form-control form-control-sm" name="title" value="<?php echo isset($title) ? $title : '' ?>">
 				</div>
+        
 			</div>
-          	<div class="col-md-6">
+
+      
+      <div class="col-md-6">
+				<div class="form-group">
+                <label for="">Academic Year</label> 
+                     <?php
+                    $s=$conn->query("SELECT * FROM semester");
+                    ?>
+                    <select name="academic_year" id="academic_year" class="custom-select custom-select-sm" >
+                        <?php
+                        while($r =mysqli_fetch_array($s))
+                        {
+                            ?>
+                            <option>Select</option>
+                            <option><?php echo $r['academic_year']; ?> </option>
+
+                            <?php
+                        }
+                        ?>
+                        </select>			
+                </div>
+			</div>  
+
+
+      <div class="col-md-6">
+				<div class="form-group">
+                <label for="">Semester Number</label> 
+                     <?php
+                    $s=$conn->query("SELECT * FROM semester");
+                    ?>
+                    <select name="semester_number" id="semester_number" class="custom-select custom-select-sm" >
+                        <?php
+                        while($r =mysqli_fetch_array($s))
+                        {
+                            ?>
+                            <option>Select</option>
+                            <option><?php echo $r['semester_number']; ?> </option>
+
+                            <?php
+                        }
+                        ?>
+                        </select>			
+                </div>
+			</div>  
+
+ 
+             <div class="col-md-6">
 				<div class="form-group">
 					<label for="">Status</label>
 					<select name="status" id="status" class="custom-select custom-select-sm">
-						<option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>To-Do</option>
-						<option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>In-Progress</option>
-						<option value="5" <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Done</option>
-                        <option value="4" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>Review</option>
+          <option>Select</option>
+						<option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>To-Do</option>
+						<option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>In-Progress</option>
+						<option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Done</option>
+            <option value="4" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>Review</option>
 					</select>
 				</div>
 			</div>
@@ -57,11 +105,13 @@
                     $s=$conn->query("SELECT * FROM users");
                     ?>
                     <select name="assign_to" id="assign_to" class="custom-select custom-select-sm">
+                    <option>Select</option>
                         <?php
                         while($r =mysqli_fetch_array($s))
                         {
                             ?>
-                            <option><?php echo $r['firstname']; ?></option>
+                            
+                            <option><?php echo $r['firstname']; ?> <?php echo $r['lastname']; ?></option>
 
                             <?php
                         }
@@ -69,15 +119,22 @@
                         </select>					
 				</div>
 			</div>
-		 <div class="col-md-6">
-             <div class="form-group">
-              <label for="" class="control-label">Comments</label>
-			  <textarea name="comment" class="form-control form-control-sm" id="comment" style="font-family:sans-serif;font-size:1.2em;">
-              <?php echo isset($comment) ? $comment : '' ?> 
-            </textarea>
-             </div>
-            </div>
-			<div class="col-md-10">
+
+
+      <div class="col-md-6">
+				<div class="form-group">
+					<label for="">Reccuring Duration</label>
+					<select name="reccuring" id="reccuring" class="custom-select custom-select-sm">
+          <option>Select</option>
+						<option value="0" <?php echo isset($reccuring) && $reccuring == 0 ? 'selected' : '' ?>>0</option>
+						<option value="15" <?php echo isset($reccuring) && $reccuring == 15 ? 'selected' : '' ?>>15</option>
+						<option value="30" <?php echo isset($reccuring) && $reccuring == 30 ? 'selected' : '' ?>>30</option>
+            <option value="45" <?php echo isset($reccuring) && $reccuring == 45 ? 'selected' : '' ?>>45</option>
+					</select>
+				</div>
+			</div>
+		 
+			<div class="col-md-6">
 				<div class="form-group">
 					<label for="" class="control-label">Description</label>
 					<textarea name="description" class="form-control form-control-sm" id="description" style="font-family:sans-serif;font-size:1.2em;">
@@ -85,31 +142,23 @@
 					</textarea>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label for="" class="control-label"> Document</label><br>
-					<input type="file" name="document" value = "<?php echo isset($document) ? $document: ''?>"><br><br>
-					<!-- <input type="file" class="form-control form-control-sm" name="file" value="<?php echo isset($name) ? $name : '' ?>"> -->
-                </div>
-            </div>
-             <!-- <div class="col-lg-12 text-right justify-content-center d-flex">
-					<button class="btn btn-primary mr-2">Save</button>
-					<button class="btn btn-secondary" type="button" onclick="location.href = 'index.php?page=task_list'">Cancel</button>
-				</div>  -->
+					</div>
     	<div class="col-lg-12 text-right justify-content-center d-flex">
     		<div class="d-flex w-100 justify-content-center align-items-center">
-    			<button class="btn btn-flat  bg-gradient-primary mx-2" form="manage-project">Save</button>
+    			<button class="btn btn-flat  bg-gradient-primary mx-2" form="manage-task">Save</button>
     			<button class="btn btn-flat bg-gradient-secondary mx-2" type="button" onclick="location.href='index.php?page=task_list'">Cancel</button>
-    		</div>
+          <br><br><br><br>
+        </div>
+        
     	</div>
-	</div>
-</div>
+				</div>
+				</div>
 <script>
-	$('#manage-project').submit(function(e){
+	$('#manage-task').submit(function(e){
 		e.preventDefault()
 		start_load()
 		$.ajax({
-			url:'ajax.php?action=save_project',
+			url:'ajax.php?action=save_task',
 			data: new FormData($(this)[0]),
 		    cache: false,
 		    contentType: false,

@@ -7,7 +7,7 @@
   ob_start();
   $title = isset($_GET['page']) ? ucwords(str_replace("_", ' ', $_GET['page'])) : "Home";
   ?>
-  <title><?php echo $title ?> | <?php echo $_SESSION['system']['name'] ?></title>
+  <title> <?php echo ("Task Doc") ?></title>
   <?php ob_end_flush() ?>
 
   <!-- Google Font: Source Sans Pro -->

@@ -10,18 +10,9 @@ if($action == 'login'){
 	if($login)
 		echo $login;
 }
-if($action == 'login2'){
-	$login = $crud->login2();
-	if($login)
-		echo $login;
-}
+
 if($action == 'logout'){
 	$logout = $crud->logout();
-	if($logout)
-		echo $logout;
-}
-if($action == 'logout2'){
-	$logout = $crud->logout2();
 	if($logout)
 		echo $logout;
 }
@@ -66,20 +57,35 @@ if($action == 'delete_task'){
 	if($save)
 		echo $save;
 }
-if($action == 'save_progress'){
-	$save = $crud->save_progress();
+
+if($action == 'delete_file'){
+	$delete = $crud->delete_file();
+	if($delete)
+		echo $delete;
+}
+
+if($action == 'save_rework'){
+	$save = $crud->save_rework();
 	if($save)
 		echo $save;
 }
-if($action == 'delete_progress'){
-	$save = $crud->delete_progress();
-	if($save)
-		echo $save;
-}
+
 if($action == 'get_report'){
 	$get = $crud->get_report();
 	if($get)
 		echo $get;
+}
+
+if($action == 'save_mdata'){
+	$save = $crud->save_mdata();
+	if($save)
+		echo $save;
+}
+
+if($action == 'delete_mdata'){
+	$save = $crud->delete_mdata();
+	if($save)
+		echo $save;
 }
 ob_end_flush();
 ?>

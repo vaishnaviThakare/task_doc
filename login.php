@@ -4,13 +4,6 @@
 session_start();
 include('./db_connect.php');
   ob_start();
-  // if(!isset($_SESSION['system'])){
-
-    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-    foreach($system as $k => $v){
-      $_SESSION['system'][$k] = $v;
-    }
-  // }
   ob_end_flush();
 ?>
 <?php 
@@ -19,10 +12,10 @@ header("location:index.php?page=home");
 
 ?>
 <?php include 'header.php' ?>
-<body class="hold-transition login-page bg-black">
+<body class="hold-transition login-page bg-navy">
 <div class="login-box">
   <div class="login-logo">
-    <a href="#" class="text-white"><b><?php echo $_SESSION['system']['name'] ?> - Admin</b></a>
+    <a href="#" class="text-white" ><b>Task Doc</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">

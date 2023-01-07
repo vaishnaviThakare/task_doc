@@ -35,19 +35,7 @@ Class Action {
 		}
 		header("location:login.php");
 	}
-	function login2(){
-		extract($_POST);
-			$qry = $this->db->query("SELECT *,concat(lastname,', ',firstname,' ',middlename) as name FROM students where student_code = '".$student_code."' ");
-		if($qry->num_rows > 0){
-			foreach ($qry->fetch_array() as $key => $value) {
-				if($key != 'password' && !is_numeric($key))
-					$_SESSION['rs_'.$key] = $value;
-			}
-				return 1;
-		}else{
-			return 3;
-		}
-	}
+	
 	function save_user(){
 		extract($_POST);
 		$data = "";
@@ -68,12 +56,6 @@ Class Action {
 		if($check > 0){
 			return 2;
 			exit;
-		}
-		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-			$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-			$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/uploads/'. $fname);
-			$data .= ", avatar = '$fname' ";
-
 		}
 		if(empty($id)){
 			$save = $this->db->query("INSERT INTO users set $data");
@@ -108,12 +90,6 @@ Class Action {
 		if($check > 0){
 			return 2;
 			exit;
-		}
-		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-			$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-			$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/uploads/'. $fname);
-			$data .= ", avatar = '$fname' ";
-
 		}
 		if(empty($id)){
 			$save = $this->db->query("INSERT INTO users set $data");
@@ -154,12 +130,6 @@ Class Action {
 			return 2;
 			exit;
 		}
-		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-			$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-			$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/uploads/'. $fname);
-			$data .= ", avatar = '$fname' ";
-
-		}
 		if(!empty($password))
 			$data .= " ,password=md5('$password') ";
 		if(empty($id)){
@@ -184,56 +154,7 @@ Class Action {
 		if($delete)
 			return 1;
 	}
-	function save_system_settings(){
-		extract($_POST);
-		$data = '';
-		foreach($_POST as $k => $v){
-			if(!is_numeric($k)){
-				if(empty($data)){
-					$data .= " $k='$v' ";
-				}else{
-					$data .= ", $k='$v' ";
-				}
-			}
-		}
-		if($_FILES['cover']['tmp_name'] != ''){
-			$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['cover']['name'];
-			$move = move_uploaded_file($_FILES['cover']['tmp_name'],'../assets/uploads/'. $fname);
-			$data .= ", cover_img = '$fname' ";
-
-		}
-		$chk = $this->db->query("SELECT * FROM system_settings");
-		if($chk->num_rows > 0){
-			$save = $this->db->query("UPDATE system_settings set $data where id =".$chk->fetch_array()['id']);
-		}else{
-			$save = $this->db->query("INSERT INTO system_settings set $data");
-		}
-		if($save){
-			foreach($_POST as $k => $v){
-				if(!is_numeric($k)){
-					$_SESSION['system'][$k] = $v;
-				}
-			}
-			if($_FILES['cover']['tmp_name'] != ''){
-				$_SESSION['system']['cover_img'] = $fname;
-			}
-			return 1;
-		}
-	}
-	function save_image(){
-		extract($_FILES['file']);
-		if(!empty($tmp_name)){
-			$fname = strtotime(date("Y-m-d H:i"))."_".(str_replace(" ","-",$name));
-			$move = move_uploaded_file($tmp_name,'assets/uploads/'. $fname);
-			$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https'?'https':'http';
-			$hostName = $_SERVER['HTTP_HOST'];
-			$path =explode('/',$_SERVER['PHP_SELF']);
-			$currentPath = '/'.$path[1]; 
-			if($move){
-				return $protocol.'://'.$hostName.$currentPath.'/assets/uploads/'.$fname;
-			}
-		}
-	}
+	
 	function save_project(){
 		extract($_POST);
 		$data = "";
@@ -251,11 +172,11 @@ Class Action {
 		if(isset($user_ids)){
 			$data .= ", user_ids='".implode(',',$user_ids)."' ";
 		}
-		// echo $data;exit;
+		
 		if(empty($id)){
-			$save = $this->db->query("INSERT INTO project_list set $data");
+			$save = $this->db->query("INSERT INTO semester set $data");
 		}else{
-			$save = $this->db->query("UPDATE project_list set $data where id = $id");
+			$save = $this->db->query("UPDATE semester set $data where id = $id");
 		}
 		if($save){
 			return 1;
@@ -263,14 +184,16 @@ Class Action {
 	}
 	function delete_project(){
 		extract($_POST);
-		$delete = $this->db->query("DELETE FROM project_list where id = $id");
+		$delete = $this->db->query("DELETE FROM semester where id = $id");
 		if($delete){
 			return 1;
 		}
 	}
+	
 	function save_task(){
 		extract($_POST);
 		$data = "";
+		
 		foreach($_POST as $k => $v){
 			if(!in_array($k, array('id')) && !is_numeric($k)){
 				if($k == 'description')
@@ -298,12 +221,28 @@ Class Action {
 			return 1;
 		}
 	}
-	function save_progress(){
+
+	function delete_file(){
+		extract($_POST);
+		$doc = $this->db->query("SELECT * FROM task_list where id= $id")->fetch_array();
+		$delete = $this->db->query("DELETE FROM task_list where id = ".$id);
+		if($delete){
+			foreach(json_decode($doc['file_json']) as $k => $v){
+				if(is_file('assets/uploads/'.$v))
+				unlink('assets/uploads/'.$v);
+			}
+			return 1;
+		}
+	}
+
+
+	function save_rework(){
 		extract($_POST);
 		$data = "";
+		
 		foreach($_POST as $k => $v){
 			if(!in_array($k, array('id')) && !is_numeric($k)){
-				if($k == 'comment')
+				if($k == 'description')
 					$v = htmlentities(str_replace("'","&#x2019;",$v));
 				if(empty($data)){
 					$data .= " $k='$v' ";
@@ -312,28 +251,16 @@ Class Action {
 				}
 			}
 		}
-		$dur = abs(strtotime("2020-01-01 ".$end_time)) - abs(strtotime("2020-01-01 ".$start_time));
-		$dur = $dur / (60 * 60);
-		$data .= ", time_rendered='$dur' ";
-		// echo "INSERT INTO user_productivity set $data"; exit;
 		if(empty($id)){
-			$data .= ", user_id={$_SESSION['login_id']} ";
-			
-			$save = $this->db->query("INSERT INTO user_productivity set $data");
+			$save = $this->db->query("INSERT INTO task_list set $data");
 		}else{
-			$save = $this->db->query("UPDATE user_productivity set $data where id = $id");
+			$save = $this->db->query("UPDATE task_list set $data where id = $id");
 		}
 		if($save){
 			return 1;
 		}
 	}
-	function delete_progress(){
-		extract($_POST);
-		$delete = $this->db->query("DELETE FROM user_productivity where id = $id");
-		if($delete){
-			return 1;
-		}
-	}
+
 	function get_report(){
 		extract($_POST);
 		$data = array();
@@ -348,5 +275,43 @@ Class Action {
 		}
 		return json_encode($data);
 
+	}
+
+
+	function save_mdata(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k => $v){
+			if(!in_array($k, array('id','user_ids')) && !is_numeric($k)){
+				if($k == 'description')
+					$v = htmlentities(str_replace("'","&#x2019;",$v));
+				if(empty($data)){
+					$data .= " $k='$v' ";
+				}else{
+					$data .= ", $k='$v' ";
+				}
+			}
+		}
+		if(isset($user_ids)){
+			$data .= ", user_ids='".implode(',',$user_ids)."' ";
+		}
+		
+		if(empty($id)){
+			$save = $this->db->query("INSERT INTO template set $data");
+		}else{
+			$save = $this->db->query("UPDATE template set $data where id = $id");
+		}
+		if($save){
+			return 1;
+		}
+	}
+
+
+	function delete_mdata(){
+		extract($_POST);
+		$delete = $this->db->query("DELETE FROM template where id = $id");
+		if($delete){
+			return 1;
+		}
 	}
 }

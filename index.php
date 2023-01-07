@@ -6,13 +6,6 @@
 	    header('location:login.php');
     include 'db_connect.php';
     ob_start();
-  if(!isset($_SESSION['system'])){
-
-    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-    foreach($system as $k => $v){
-      $_SESSION['system'][$k] = $v;
-    }
-  }
   ob_end_flush();
 
 	include 'header.php' 
@@ -49,7 +42,7 @@
          <?php 
             $page = isset($_GET['page']) ? $_GET['page'] : 'home';
             if(!file_exists($page.".php")){
-                include '404.html';
+                
             }else{
             include $page.'.php';
 
@@ -112,28 +105,9 @@
     </div>
   </div>
   </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2021 <a href="https://www.campcodes.com/">CampCodes</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b><?php echo $_SESSION['system']['name'] ?></b>
-    </div>
-  </footer>
-</div>
-<!-- ./wrapper -->
-
-<!-- REQUIRED SCRIPTS -->
-<!-- jQuery -->
-<!-- Bootstrap -->
+  
+  <aside class="control-sidebar control-sidebar-dark">  </aside>
+ 
 <?php include 'footer.php' ?>
 </body>
 </html>
